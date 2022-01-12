@@ -48,14 +48,25 @@ app.get('/:id', async (req, res) => {
 
 //----Modification d'une voiture---
 
-app.post('/', (req, res) => {
-    const { id } = req.body
-    Car.updateOne({ _id: id })
+app.put('/:id', (req, res) => {
+    const { id } = req.params
+    Car.updateOne({ _id: id }, { ...req.body, _id: id })
+
+    // car.save((err, car) => {
+    //     if (err) {
+    //         res.status(500).json({ error: err })
+    //         return
+    //     }
+
+    //     res.json(car)
+    // })
 })
 
 //----Suppression d'une voiture---
 
 app.delete('/:id', (req, res) => {
+    const { brand } = req.params
+    Car.deleteMany({ brand: brand })
     console.log(req.body)
 })
 

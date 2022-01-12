@@ -5,7 +5,7 @@ const carSchema = new mongoose.Schema({
         type: String
     },
     model:	{
-        typre: String
+        type: String
     },
     year:	{
         type: Number
