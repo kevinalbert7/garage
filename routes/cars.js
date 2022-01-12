@@ -30,17 +30,8 @@ app.get('/', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err })
     }
-    // Car.find((err, cars) => {
-    //     if (err) {
-    //         res.status(500).json({ error: err })
-    //         return
-    //     }
-    // res.json(cars)
-    // })
 })
 
-
-// error : {}
 //----Selection d'une voiture par son id---
 
 app.get('/:id', async (req, res) => {
