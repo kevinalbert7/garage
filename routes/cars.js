@@ -3,7 +3,7 @@ const app = express()
 
 const Car = require("../models/car")
 
-//----Création d'une voiture---
+//----Création d'une nouvelle voiture---
 
 app.post('/', (req, res) => {
     console.log(req.body)
@@ -23,23 +23,31 @@ app.post('/', (req, res) => {
 
 //----Liste toutes les voitures---
 
-app.get('/', (req, res) => {
-    Car.find((err, cars) => {
-        if (err) {
-            res.status(500).json({ error: err })
-            return
-        }
-    res.json(cars)
-    })
+app.get('/', async (req, res) => {
+    try {
+        const cars = await Car.find().exec()
+        res.json(cars)
+    } catch (err) {
+        res.status(500).json({ error: err })
+    }
+    // Car.find((err, cars) => {
+    //     if (err) {
+    //         res.status(500).json({ error: err })
+    //         return
+    //     }
+    // res.json(cars)
+    // })
 })
 
+
+// error : {}
 //----Selection d'une voiture par son id---
 
 app.get('/:id', async (req, res) => {
     const { id } = req.params
 
     try {
-        const car = await Car.findById({ _id: id })
+        const car = await Car.findById({ _id: id }).exec()
         res.json(car)
     } catch (err) {
             res.status(500).json({ error: err })
@@ -48,26 +56,28 @@ app.get('/:id', async (req, res) => {
 
 //----Modification d'une voiture---
 
-app.put('/:id', (req, res) => {
+app.put('/:id', async (req, res) => {
     const { id } = req.params
-    Car.updateOne({ _id: id }, { ...req.body, _id: id })
 
-    // car.save((err, car) => {
-    //     if (err) {
-    //         res.status(500).json({ error: err })
-    //         return
-    //     }
-
-    //     res.json(car)
-    // })
+    try {
+        const car = await Car.updateOne({ _id: id }, { ...req.body, _id: id })
+        res.json(car)
+    } catch (err) {
+            res.status(500).json({ error: err })
+    }
 })
 
 //----Suppression d'une voiture---
 
-app.delete('/:id', (req, res) => {
-    const { brand } = req.params
-    Car.deleteMany({ brand: brand })
-    console.log(req.body)
+app.delete('/:id', async (req, res) => {
+    const { id } = req.params
+    
+    try {
+        const car = await Car.deleteOne({ _id: id }, { ...req.body, _id: id })
+        res.json(car)
+    } catch (err) {
+            res.status(500).json({ error: err })
+    }
 })
 
 module.exports = app
